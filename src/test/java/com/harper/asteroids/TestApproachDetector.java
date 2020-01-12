@@ -1,5 +1,6 @@
 package com.harper.asteroids;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.harper.asteroids.model.NearEarthObject;
 import org.junit.Before;
@@ -12,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 
 public class TestApproachDetector {
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     private NearEarthObject neo1, neo2;
 
     @Before
@@ -25,13 +26,13 @@ public class TestApproachDetector {
     @Test
     public void testFiltering() {
 
-        List<NearEarthObject> neos = List.of(neo1, neo2);
+        List<NearEarthObject> neos = List.of(neo2, neo1);
         List<NearEarthObject> filtered = ApproachDetector.getClosest(neos, 1);
         //Neo2 has the closest passing at 5261628 kms away.
         // TODO: Neo2's closest passing is in 2028.
         // In Jan 202, neo1 is closer (5390966 km, vs neo2's at 7644137 km)
         assertEquals(1, filtered.size());
-        assertEquals(neo2, filtered.get(0));
+        assertEquals(neo1, filtered.get(0));
 
     }
 }

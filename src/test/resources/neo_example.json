@@ -29,8 +29,8 @@
   "is_potentially_hazardous_asteroid": false,
   "close_approach_data": [
     {
-      "close_approach_date": "2020-01-01",
-      "close_approach_date_full": "2020-Jan-01 02:06",
+      "close_approach_date": "2020-01-13",
+      "close_approach_date_full": "2020-Jan-13 02:06",
       "epoch_date_close_approach": 1577844360000,
       "relative_velocity": {
         "kilometers_per_second": "7.346100139",

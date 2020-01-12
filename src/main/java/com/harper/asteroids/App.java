@@ -35,18 +35,16 @@ public class App {
 
     private static final String NEO_FEED_URL = "https://api.nasa.gov/neo/rest/v1/feed";
 
-    protected static String API_KEY = "DEMO_KEY";
+    protected static String API_KEY = "WlqoAhVy3ZWVdLFtDxKLq7ccthy5CIChAqOYYKs9";
 
     private Client client;
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper;
 
     public App() {
-
-
         ClientConfig configuration = new ClientConfig();
         client = ClientBuilder.newClient(configuration);
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        mapper = new ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     /**
@@ -63,12 +61,11 @@ public class App {
                 .get();
         System.out.println("Got response: " + response);
         if(response.getStatus() == Response.Status.OK.getStatusCode()) {
-            ObjectMapper mapper = new ObjectMapper();
+//            ObjectMapper mapper = new ObjectMapper();  It shouldn't be here.
             String content = response.readEntity(String.class);
 
-
             try {
-                Feed neoFeed = mapper.readValue(content, Feed.class);
+                Feed neoFeed = this.mapper.readValue(content, Feed.class);
                 ApproachDetector approachDetector = new ApproachDetector(neoFeed.getAllObjectIds());
 
                 List<NearEarthObject> closest =  approachDetector.getClosestApproaches(10);
@@ -76,6 +73,7 @@ public class App {
                 System.out.println("----------------------------------------------------------------------");
                 for(NearEarthObject neo: closest) {
                     Optional<CloseApproachData> closestPass = neo.getCloseApproachData().stream()
+                            .filter(cad->DateValidator.isWithinNextWeek(cad.getCloseApproachDateTime()))
                             .min(Comparator.comparing(CloseApproachData::getMissDistance));
 
                     if(closestPass.isEmpty()) continue;

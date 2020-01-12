@@ -14,7 +14,7 @@ public class CloseApproachData {
     private Date closeApproachDate;
 
     @JsonProperty("close_approach_date_full")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MMM-dd hh:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MMM-dd hh:mm", locale = "en_GB")
     private Date closeApproachDateTime;
 
     @JsonProperty("epoch_date_close_approach")

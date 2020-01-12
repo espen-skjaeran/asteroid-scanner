@@ -1,9 +1,12 @@
 package com.harper.asteroids;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.harper.asteroids.model.CloseApproachData;
 import com.harper.asteroids.model.Distances;
 import com.harper.asteroids.model.NearEarthObject;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.Optional;
 
@@ -12,9 +15,11 @@ public class VicinityComparator implements Comparator<NearEarthObject> {
     public int compare(NearEarthObject neo1, NearEarthObject neo2) {
 
         Optional<Distances> neo1ClosestPass = neo1.getCloseApproachData().stream()
+                .filter(cad->DateValidator.isWithinNextWeek(cad.getCloseApproachDate()))
                 .min(Comparator.comparing(CloseApproachData::getMissDistance))
                 .map(min -> min.getMissDistance());
         Optional<Distances> neo2ClosestPass = neo2.getCloseApproachData().stream()
+                .filter(cad->DateValidator.isWithinNextWeek(cad.getCloseApproachDate()))
                 .min(Comparator.comparing(CloseApproachData::getMissDistance))
                 .map(min -> min.getMissDistance());
 
@@ -26,4 +31,5 @@ public class VicinityComparator implements Comparator<NearEarthObject> {
         }
         else return -1;
     }
+
 }
