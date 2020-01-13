@@ -12,6 +12,7 @@ import org.glassfish.jersey.client.ClientConfig;
 
 import java.io.IOException;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -42,36 +43,43 @@ public class App {
     private ObjectMapper mapper = new ObjectMapper();
 
     public App() {
-
-
         ClientConfig configuration = new ClientConfig();
         client = ClientBuilder.newClient(configuration);
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
+
+    /*private void checkForAsteroids() {
+        //step one - getFeed
+        //step two - calculate
+        //step three - printResults
+    }*/
+
 
     /**
      * Scan space for asteroids close to earth
      */
     private void checkForAsteroids() {
         LocalDate today = LocalDate.now();
+        LocalDate startWeek = today.with(DayOfWeek.MONDAY);
+        LocalDate endWeek = today.with(DayOfWeek.SUNDAY);
+
         Response response = client
                 .target(NEO_FEED_URL)
-                .queryParam("start_date",  today.toString())
-                .queryParam("end_date", today.toString())
+                .queryParam("start_date",  startWeek.toString())
+                .queryParam("end_date", endWeek.toString())
                 .queryParam("api_key", API_KEY)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
         System.out.println("Got response: " + response);
         if(response.getStatus() == Response.Status.OK.getStatusCode()) {
-            ObjectMapper mapper = new ObjectMapper();
+            //ObjectMapper mapper = new ObjectMapper(); clears mapper configuration
             String content = response.readEntity(String.class);
-
 
             try {
                 Feed neoFeed = mapper.readValue(content, Feed.class);
-                ApproachDetector approachDetector = new ApproachDetector(neoFeed.getAllObjectIds());
+                ApproachDetector approachDetector = new ApproachDetector(mapper, neoFeed.getAllObjectIds());
 
-                List<NearEarthObject> closest =  approachDetector.getClosestApproaches(10);
+                List<NearEarthObject> closest =  approachDetector.getClosestApproachesVer2(10);
                 System.out.println("Hazard?   Distance(km)    When                             Name");
                 System.out.println("----------------------------------------------------------------------");
                 for(NearEarthObject neo: closest) {
