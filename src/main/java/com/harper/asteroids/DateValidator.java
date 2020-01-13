@@ -16,7 +16,7 @@ public  class DateValidator {
         firstDayofNewWeek.set(Calendar.MINUTE, 0);
         firstDayofNewWeek.set(Calendar.SECOND, 0);
         lastDayofNewWeek.setTime(firstDayofNewWeek.getTime());
-        lastDayofNewWeek.add(Calendar.DATE,365);
+        lastDayofNewWeek.add(Calendar.DATE,7);
         Date firstDay = firstDayofNewWeek.getTime();
         Date lastDay = lastDayofNewWeek.getTime();
         if(date.after(firstDayofNewWeek.getTime()) && date.before(lastDayofNewWeek.getTime())){
