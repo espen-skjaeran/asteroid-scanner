@@ -52,10 +52,11 @@ public class App {
      */
     private void checkForAsteroids() {
         LocalDate today = LocalDate.now();
+        LocalDate weekLater=today.plusDays(6);
         Response response = client
                 .target(NEO_FEED_URL)
                 .queryParam("start_date",  today.toString())
-                .queryParam("end_date", today.toString())
+                .queryParam("end_date", weekLater.toString())
                 .queryParam("api_key", API_KEY)
                 .request(MediaType.APPLICATION_JSON)
                 .get();
