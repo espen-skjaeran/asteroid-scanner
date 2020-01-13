@@ -10,7 +10,7 @@ import java.util.List;
  *
  * TODO: why the h*** must I add this annotation to ignore unknown properties when I set it on ObjectMapper?
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class NearEarthObject {
 
     @JsonProperty("id")

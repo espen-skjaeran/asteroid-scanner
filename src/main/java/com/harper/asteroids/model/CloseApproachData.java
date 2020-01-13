@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
+//@JsonIgnoreProperties(ignoreUnknown = true)
 public class CloseApproachData {
 
     @JsonProperty("close_approach_date")
@@ -14,7 +14,7 @@ public class CloseApproachData {
     private Date closeApproachDate;
 
     @JsonProperty("close_approach_date_full")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MMM-dd hh:mm")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MMM-dd hh:mm", locale = "EN")
     private Date closeApproachDateTime;
 
     @JsonProperty("epoch_date_close_approach")
